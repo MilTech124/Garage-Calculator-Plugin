@@ -1,6 +1,7 @@
 # .
 
-This template should help get you started developing with Vue 3 in Vite.
+Simple plugin for garages company. Just chosing and send mail with options...
+https://newgarage.pl/index.php/kalkulator/
 
 ## Recommended IDE Setup
 
