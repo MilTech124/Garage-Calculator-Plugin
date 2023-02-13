@@ -6,7 +6,7 @@
         <p>Szerokość</p>
         <img :src="Image + 'width.svg'" alt="width" />
         <select required v-model="width">
-          <option value="" disabled selected>Wybierz opcje</option>
+          <option value="" disabled selected>Wybierz opcje</option>         
           <option v-for="rozmiar in rozmiary" :key="rozmiar">
             {{ rozmiar }}m
           </option>
@@ -27,6 +27,7 @@
         <img :src="Image + 'height.svg'" alt="height" />
         <select placeholder="wpisz w cm" required v-model="height">
           <option value="" disabled selected>Wybierz opcje</option>
+          <option selected>213 cm standard</option>
           <option v-for="wysokosc in wysokosci" :key="wysokosc">
             {{ wysokosc }} cm
           </option>
@@ -818,7 +819,7 @@
           placeholder="Imię i nazwisko"
           v-model="name"
         />
-        <input type="email" id="email" placeholder="Email" v-model="email" />
+        <input type="email" id="email" placeholder="Email" required v-model="email"  @blur="validateEmail" />
         <input type="tel" id="tel" placeholder="Nr telefonu" v-model="tel" />
       </div>
       <div class="flex-col conf-contact">
@@ -891,7 +892,7 @@ const currentPage = ref(1);
 let wysokosci = [];
 let rozmiary = [];
 let sum = 1.5;
-let sum2 = 203;
+let sum2 = 213;
 // ROZMIARY POMOCNICZE
 for (let index = 2; index < 17; index++) {
   let temp = sum;
@@ -934,25 +935,37 @@ const sendMail = () => {
     textarea: textarea.value,
     przetloczenieBramy: przetloczenieBramy.value,
   };
-  emailjs
-    .send(
-      "service_nfi5dzq",
-      "template_692vjcc",
-      templateParams,
-      "8R7EpCYICZiaQkFpj"
-    )
-    .then(
-      function (response) {
-        if (name.value && email.value && tel.value) {
+
+  if (name.value && email.value && tel.value && validateEmail()===true) {
+    emailjs
+      .send(
+        "service_nfi5dzq",
+        "template_692vjcc",
+        templateParams,
+        "8R7EpCYICZiaQkFpj"
+      )
+      .then(
+        function (response) {
           toast.success("Wysłano dane");
           window.location.href = "https://newgarage.pl/";
-        } else toast.error("Uzupełnij danymi");
-      },
-      function (error) {
-        console.log("FAILED...", error);
-      }
-    );
+        },
+        function (error) {
+          console.log("FAILED...", error);
+        }
+      )
+  }else toast.error("uzupełnij danymi")
 };
+
+
+const validateEmail=()=> {
+  const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!regex.test(email.value)) {
+        toast.error('Wpisz poprawnego maila !!!')
+        return false
+    } else {
+        return true
+    }
+}
 
 const setTypeRoof = (type) => {
   typeRoof.value = type;
@@ -1077,7 +1090,7 @@ p {
 }
 .gate_input {
   width: 100%;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
   max-width: 350px;
   font-size: 24px;
 }

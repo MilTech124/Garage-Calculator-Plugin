@@ -1,15 +1,15 @@
 
 <script setup>
-import FirstSite from "./components/FirstSite.vue";
+import Calculator from "./components/Calculator.vue";
 
 components: {
-  FirstSite;
+  Calculator;
 }
 </script>
 
 <template>
   <div id="calculator">
-    <first-site />
+    <Calculator />
   </div>
 </template>
 
